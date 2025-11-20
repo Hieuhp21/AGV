@@ -1,0 +1,13 @@
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.csproj.AssemblyReference.cache
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.Properties.Resources.resources
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.csproj.GenerateResource.cache
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.csproj.CoreCompileInputs.cache
+D:\A_Project\AGV_BAA_LGE\AGVNew\bin\Debug\AGVNew.exe.config
+D:\A_Project\AGV_BAA_LGE\AGVNew\bin\Debug\AGVNew.exe
+D:\A_Project\AGV_BAA_LGE\AGVNew\bin\Debug\AGVNew.pdb
+D:\A_Project\AGV_BAA_LGE\AGVNew\bin\Debug\Newtonsoft.Json.dll
+D:\A_Project\AGV_BAA_LGE\AGVNew\bin\Debug\Newtonsoft.Json.xml
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.csproj.Up2Date
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.exe
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.pdb
+D:\A_Project\AGV_BAA_LGE\AGVNew\obj\Debug\AGVNew.Views.MainForm.resources

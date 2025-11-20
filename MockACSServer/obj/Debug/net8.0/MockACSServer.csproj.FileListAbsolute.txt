@@ -1,0 +1,17 @@
+D:\A_Project\AGV_BAA_LGE\MockACSServer\bin\Debug\net8.0\MockACSServer.exe
+D:\A_Project\AGV_BAA_LGE\MockACSServer\bin\Debug\net8.0\MockACSServer.deps.json
+D:\A_Project\AGV_BAA_LGE\MockACSServer\bin\Debug\net8.0\MockACSServer.runtimeconfig.json
+D:\A_Project\AGV_BAA_LGE\MockACSServer\bin\Debug\net8.0\MockACSServer.dll
+D:\A_Project\AGV_BAA_LGE\MockACSServer\bin\Debug\net8.0\MockACSServer.pdb
+D:\A_Project\AGV_BAA_LGE\MockACSServer\bin\Debug\net8.0\Newtonsoft.Json.dll
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.csproj.AssemblyReference.cache
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.GeneratedMSBuildEditorConfig.editorconfig
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.AssemblyInfoInputs.cache
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.AssemblyInfo.cs
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.csproj.CoreCompileInputs.cache
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSS.FE049960.Up2Date
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.dll
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\refint\MockACSServer.dll
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.pdb
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\MockACSServer.genruntimeconfig.cache
+D:\A_Project\AGV_BAA_LGE\MockACSServer\obj\Debug\net8.0\ref\MockACSServer.dll

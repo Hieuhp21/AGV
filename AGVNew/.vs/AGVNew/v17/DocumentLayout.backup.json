@@ -1,0 +1,367 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|d:\\a_project\\agv_baa_lge\\agvnew\\presenters\\mainpresenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:presenters\\mainpresenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\managerhttp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\managerhttp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\managerlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\managerlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\mockplcservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\mockplcservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\agvdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\agvdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\mitsubishiplc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\mitsubishiplc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\realcommand2acs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\realcommand2acs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\realacs2agv.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\realacs2agv.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\fullpathacs2agv.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\fullpathacs2agv.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\acs2agvresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\acs2agvresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\acsactioncommandack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\acsactioncommandack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\resources\\lg_electronics_logo.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:resources\\lg_electronics_logo.png||{177559E0-D141-11D0-92DF-00A0C9138C45}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\utils\\languagemap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:utils\\languagemap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 12,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ACS2AGVResult.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACS2AGVResult.cs",
+              "RelativeDocumentMoniker": "Models\\ACS2AGVResult.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACS2AGVResult.cs",
+              "RelativeToolTip": "Models\\ACS2AGVResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:34:39.213Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ManagerHTTP.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerHTTP.cs",
+              "RelativeDocumentMoniker": "Services\\ManagerHTTP.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerHTTP.cs*",
+              "RelativeToolTip": "Services\\ManagerHTTP.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:37:27.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ManagerLog.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerLog.cs",
+              "RelativeDocumentMoniker": "Services\\ManagerLog.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerLog.cs",
+              "RelativeToolTip": "Services\\ManagerLog.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowA4AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:37:56.876Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
+              "RelativeDocumentMoniker": "Views\\MainForm.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
+              "RelativeToolTip": "Views\\MainForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:55:12.893Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainForm.cs [Design]",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
+              "RelativeDocumentMoniker": "Views\\MainForm.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs [Design]",
+              "RelativeToolTip": "Views\\MainForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:36:24.673Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainPresenter.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Presenters\\MainPresenter.cs",
+              "RelativeDocumentMoniker": "Presenters\\MainPresenter.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Presenters\\MainPresenter.cs*",
+              "RelativeToolTip": "Presenters\\MainPresenter.cs*",
+              "ViewState": "AgIAAM8AAAAAAAAAAAAAwOwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:36:57.938Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MockPLCService.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MockPLCService.cs",
+              "RelativeDocumentMoniker": "Services\\MockPLCService.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MockPLCService.cs",
+              "RelativeToolTip": "Services\\MockPLCService.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAIwFYAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-12T06:10:47.495Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AGVData.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\AGVData.cs",
+              "RelativeDocumentMoniker": "Models\\AGVData.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\AGVData.cs",
+              "RelativeToolTip": "Models\\AGVData.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAowEsAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:31:53.263Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "FullPathACS2AGV.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\FullPathACS2AGV.cs",
+              "RelativeDocumentMoniker": "Models\\FullPathACS2AGV.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\FullPathACS2AGV.cs",
+              "RelativeToolTip": "Models\\FullPathACS2AGV.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:32:47.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MitsubishiPLC.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MitsubishiPLC.cs",
+              "RelativeDocumentMoniker": "Services\\MitsubishiPLC.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MitsubishiPLC.cs",
+              "RelativeToolTip": "Services\\MitsubishiPLC.cs",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAYwBsBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:37:44.399Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RealCommand2ACS.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\RealCommand2ACS.cs",
+              "RelativeDocumentMoniker": "Models\\RealCommand2ACS.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\RealCommand2ACS.cs",
+              "RelativeToolTip": "Models\\RealCommand2ACS.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:32:09.53Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "RealACS2AGV.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\RealACS2AGV.cs",
+              "RelativeDocumentMoniker": "Models\\RealACS2AGV.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\RealACS2AGV.cs",
+              "RelativeToolTip": "Models\\RealACS2AGV.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:32:32.264Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "MainForm.Designer.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.Designer.cs",
+              "RelativeDocumentMoniker": "Views\\MainForm.Designer.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.Designer.cs",
+              "RelativeToolTip": "Views\\MainForm.Designer.cs",
+              "ViewState": "AgIAAKoCAAAAAAAAAAAswCYCAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:55:03.073Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T07:22:49.714Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ACSActionCommandACK.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACSActionCommandACK.cs",
+              "RelativeDocumentMoniker": "Models\\ACSActionCommandACK.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACSActionCommandACK.cs",
+              "RelativeToolTip": "Models\\ACSActionCommandACK.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:34:56.515Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "LG_Electronics_logo.png - PNG [603x90, 32 bit, PNG]",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Resources\\LG_Electronics_logo.png",
+              "RelativeDocumentMoniker": "Resources\\LG_Electronics_logo.png",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Resources\\LG_Electronics_logo.png - PNG [603x90, 32 bit, PNG]",
+              "RelativeToolTip": "Resources\\LG_Electronics_logo.png - PNG [603x90, 32 bit, PNG]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2025-09-25T01:49:38.881Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "LanguageMap.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Utils\\LanguageMap.cs",
+              "RelativeDocumentMoniker": "Utils\\LanguageMap.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Utils\\LanguageMap.cs",
+              "RelativeToolTip": "Utils\\LanguageMap.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:38:13.249Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "App.config",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\App.config",
+              "RelativeDocumentMoniker": "App.config",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\App.config",
+              "RelativeToolTip": "App.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-09-11T06:36:34.512Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Form1.cs [Design]",
+              "RelativeToolTip": "Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:26:40.286Z"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
