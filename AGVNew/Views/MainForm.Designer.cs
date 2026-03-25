@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace AGVNew.Views
@@ -186,9 +186,11 @@ namespace AGVNew.Views
             // 
             // textBoxalarm
             // 
+            this.textBoxalarm.Font = new System.Drawing.Font("Consolas", 9F);
             this.textBoxalarm.Location = new System.Drawing.Point(13, 37);
             this.textBoxalarm.Multiline = true;
             this.textBoxalarm.Name = "textBoxalarm";
+            this.textBoxalarm.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxalarm.Size = new System.Drawing.Size(286, 380);
             this.textBoxalarm.TabIndex = 2;
             // 
@@ -853,7 +855,7 @@ namespace AGVNew.Views
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "AGV APP";
-            this.TopMost = true;
+            this.TopMost = false;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using AGVNew.Models;
 
@@ -32,7 +32,7 @@ namespace AGVNew.Services
         {
             if (_mockThread == null || !_mockThread.IsAlive)
             {
-                ManagerLog.Instance.AddLog("System", "Mock", "Starting mock data simulation");
+                ManagerLog.Instance.AddLog("System", "Mock", "Starting mock data simulation for all AGVs");
                 IsRunning = true;
                 _mockThread = new Thread(MockThreadRun) { IsBackground = true };
                 _mockThread.Start();
@@ -41,12 +41,18 @@ namespace AGVNew.Services
 
         public void StopMock()
         {
+            IsRunning = false;
             if (_mockThread != null && _mockThread.IsAlive)
             {
-                IsRunning = false;
-                _mockThread.Interrupt();
+                try
+                {
+                    _mockThread.Interrupt();
+                    _mockThread.Join(1000); // Timeout 1s
+                }
+                catch { }
                 ManagerLog.Instance.AddLog("System", "Mock", "Stopped mock data simulation");
             }
+            _mockThread = null;
         }
 
         private void MockThreadRun()
@@ -55,30 +61,31 @@ namespace AGVNew.Services
             {
                 try
                 {
-                    lock (AGVData._lock) // Dùng lock từ AGVData
+                    // Mock data cho TẤT CẢ AGV instances
+                    foreach (var kvp in AGVData.All)
                     {
-                        var state = new AGVData.State();
-                       // state.agv_id = 1;
-                        state.action_0 = _random.Next(0, 2) == 1;
-                      //  state.action_1 = _random.Next(0, 2) == 1;
-                   
-                       // state.action_2 = _random.Next(0, 2) == 1;
-                       
-                        state.battery = _random.Next(0, 101);
-                        state.tag_id = "00011";
-                      //  state.speed_0 = _random.Next(0, 2) == 1;
-                      //  state.speed_1 = _random.Next(0, 2) == 1;
-                        state.direction = _random.Next(0, 2) == 1;
-                        state.state_0 = _random.Next(0, 2) == 1;
-                        state.state_1 = false;
-                        state.error = _random.Next(0, 4);
-                     //   state.auto_mode = _random.Next(0, 2) == 1;
-                     //   state.manual_mode = !state.auto_mode;
-                    //    state.check_connect = true;
+                        string agvKey = kvp.Key;
+                        AGVData agvData = kvp.Value;
 
-                        AGVData.Instance.state = state;
+                        lock (AGVData._lock)
+                        {
+                            var state = new AGVData.State();
+                            state.action_0 = _random.Next(0, 2) == 1;
+                            state.battery = _random.Next(0, 101);
+                            state.tag_id = agvKey == "AGV1" ? "00011" : "00022";
+                            state.direction = _random.Next(0, 2) == 1;
+                            state.state_0 = _random.Next(0, 2) == 1;
+                            state.state_1 = false;
+                            state.error = _random.Next(0, 4);
+                            state.speed = _random.Next(0, 4);
+                            state.action_1 = _random.Next(0, 3);
+                            state.action_2 = _random.Next(0, 3);
+                            state.mode = _random.Next(0, 2) == 1;
 
-                        ManagerLog.Instance.AddLog("System", "Mock", $"Mock data generated: agv_id={state.agv_id}, battery={state.battery}%, error={state.error}, tag_id={state.tag_id}");
+                            agvData.state = state;
+
+                            ManagerLog.Instance.AddLog("System", "Mock", $"[{agvKey}] Mock data: battery={state.battery}%, error={state.error}, tag_id={state.tag_id}");
+                        }
                     }
                     Thread.Sleep(500);
                 }

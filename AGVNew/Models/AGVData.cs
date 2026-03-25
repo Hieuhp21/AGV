@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace AGVNew.Models
@@ -7,7 +7,36 @@ namespace AGVNew.Models
     {
         public static readonly object _lock = new object();
         private State _state = new State();
-        public static AGVData Instance { get; } = new AGVData();
+
+        // Multi-AGV support
+        private static readonly Dictionary<string, AGVData> _instances = new Dictionary<string, AGVData>();
+
+        /// <summary>
+        /// Backward-compatible: trả về AGV1 mặc định
+        /// </summary>
+        public static AGVData Instance => GetOrCreate("AGV1");
+
+        /// <summary>
+        /// Lấy hoặc tạo AGVData theo key (VD: "AGV1", "AGV2")
+        /// </summary>
+        public static AGVData GetOrCreate(string agvKey)
+        {
+            lock (_lock)
+            {
+                if (!_instances.ContainsKey(agvKey))
+                {
+                    var data = new AGVData();
+                    data.option.AGV_Key = agvKey;
+                    _instances[agvKey] = data;
+                }
+                return _instances[agvKey];
+            }
+        }
+
+        /// <summary>
+        /// Trả về tất cả AGV instances
+        /// </summary>
+        public static IReadOnlyDictionary<string, AGVData> All => _instances;
 
         public Option option { get; set; } = new Option();
         public State state
@@ -69,8 +98,10 @@ namespace AGVNew.Models
                 default: return "Unknown";
             }
         }
+
         public class Option
         {
+            public string AGV_Key { get; set; } = "AGV1";
             public string AGV_ID { get; set; } = "KD130";
             public string IP { get; set; } = "localhost"; // Server API IP
             public int Port { get; set; } = 8000; // Server API Port
@@ -79,9 +110,18 @@ namespace AGVNew.Models
             public double AGV_Battery_MIN { get; set; } = 0;
             public double AGV_Battery_MAX { get; set; } = 100;
             public int AGV_LineCount_MAX_Count { get; set; } = 5;
-            public string PLC_IP { get; set; } = "192.168.0.100"; // PLC FX5U IP
+            public string PLC_IP { get; set; } = "10.224.11.163"; // PLC FX5U IP
             public int PLC_Port { get; set; } = 5001; // PLC Port (MC Protocol)
-            public int PLC_LogicalStationNumber { get; set; } = 2; // Logical Station Number in MX Component
+            public int PLC_LogicalStationNumber { get; set; } = 3; // Logical Station Number in MX Component
+
+            // PLC Address Config per-AGV (dễ thay đổi khi chốt)
+            // AGV1: M5000+, D5003+ | AGV2: placeholder M6000+, D6003+
+            public int PLC_M_Base { get; set; } = 5000;       // M5000 cho AGV1
+            public int PLC_D_Action1 { get; set; } = 5003;    // D5003 cho AGV1
+            public int PLC_D_Action2 { get; set; } = 5004;    // D5004 cho AGV1
+            public int PLC_D_Battery { get; set; } = 5005;    // D5005 cho AGV1
+            public int PLC_D_TagId_Base { get; set; } = 5010; // D5010-D5014 cho AGV1
+            public int PLC_D_Error { get; set; } = 5015;      // D5015 cho AGV1
         }
 
         public class State

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Net.Http;
@@ -26,9 +26,11 @@ namespace AGVNew.Services
 		private const int MaxRetryAttempts = 3;
 		private const int RetryDelayMs = 2000;
 
-		// THÊM: Chỉ gửi khi có thay đổi
-		private string _lastSentMessage = string.Empty;
-		private readonly object _lock = new object(); // thread-safe
+		// Per-AGV: tracking last sent message và thời gian gửi
+		private readonly Dictionary<string, string> _lastSentMessages = new Dictionary<string, string>();
+		private readonly Dictionary<string, DateTime> _lastSentTimes = new Dictionary<string, DateTime>();
+		private readonly object _lock = new object();
+		private const int HeartbeatIntervalSec = 30; // Gửi heartbeat mỗi 30s dù không thay đổi
 
 		public static ManagerHTTP Instance
 		{
@@ -72,8 +74,12 @@ namespace AGVNew.Services
 			Check_Thread = false;
 			if (Thread != null && Thread.IsAlive)
 			{
-				Thread.Interrupt();
-				Thread.Join();
+				try
+				{
+					Thread.Interrupt();
+					Thread.Join(2000);
+				}
+				catch { }
 				ManagerLog.Instance.AddLog("System", "HTTP", "Thread - Stopped");
 			}
 			Thread = null;
@@ -85,75 +91,80 @@ namespace AGVNew.Services
 			{
 				try
 				{
-					MitsubishiPLC.Instance.UpdateStateFromPLC();
-
-					string endpoint = "/agv/report/";
-					string real_send_msg = Make_Send_2_ACS_Set();
-
-					// KIỂM TRA CÓ THAY ĐỔI KHÔNG
-					bool shouldSend = false;
-					lock (_lock)
+					foreach (var kvp in AGVData.All)
 					{
-						if (real_send_msg != _lastSentMessage)
+						string agvKey = kvp.Key;
+						AGVData agvData = kvp.Value;
+
+						// Đọc PLC cho AGV này
+						MitsubishiPLC.Instance.UpdateStateFromPLC(agvData);
+
+						string endpoint = "/agv/report/";
+						string real_send_msg = Make_Send_2_ACS_Set(agvData);
+
+						// Kiểm tra có thay đổi hoặc đến lúc heartbeat
+						bool shouldSend = false;
+						lock (_lock)
 						{
-							_lastSentMessage = real_send_msg;
-							shouldSend = true;
-						}
-					}
+							string lastMsg;
+							_lastSentMessages.TryGetValue(agvKey, out lastMsg);
+							DateTime lastTime;
+							_lastSentTimes.TryGetValue(agvKey, out lastTime);
+							bool heartbeatDue = (DateTime.Now - lastTime).TotalSeconds >= HeartbeatIntervalSec;
 
-					// GỬI KHI CÓ THAY ĐỔI HOẶC LẦN ĐẦU
-					if (shouldSend || string.IsNullOrEmpty(_lastSentMessage))
-					{
-						var content = new FormUrlEncodedContent(ParseQueryString(real_send_msg));
-
-						bool success = false;
-						for (int attempts = 1; attempts <= MaxRetryAttempts && !success; attempts++)
-						{
-							try
+							if (real_send_msg != lastMsg || heartbeatDue)
 							{
-								ManagerLog.Instance.AddLog("System", "HTTP-Send", $"Gửi thay đổi: {real_send_msg}");
-
-								var response = await _httpClient.PostAsync(endpoint, content)
-									.ConfigureAwait(false);
-
-								if (response.IsSuccessStatusCode)
-								{
-									string json = await response.Content.ReadAsStringAsync()
-										.ConfigureAwait(false);
-
-									ManagerLog.Instance.AddLog("System", "HTTP-Receive", json);
-									Parsing_Real_Message_2_AGV(json);
-									timeout_Init();
-									success = true;
-									IsServerConnected = true;
-								}
-								else
-								{
-									http_result = (int)response.StatusCode;
-									ManagerLog.Instance.AddLog("System", "HTTP-Result", $"Status: {http_result}");
-									if (attempts < MaxRetryAttempts)
-										await Task.Delay(RetryDelayMs).ConfigureAwait(false);
-								}
-							}
-							catch (Exception ex)
-							{
-								ManagerLog.Instance.AddLog("System", "HTTP", $"Error (Attempt {attempts}): {ex.Message}");
-								if (attempts < MaxRetryAttempts)
-									await Task.Delay(RetryDelayMs).ConfigureAwait(false);
+								_lastSentMessages[agvKey] = real_send_msg;
+								_lastSentTimes[agvKey] = DateTime.Now;
+								shouldSend = true;
 							}
 						}
 
-						if (!success)
+						if (shouldSend)
 						{
-							IsServerConnected = false;
-							timeout_Check();
+							bool success = false;
+							using (var content = new FormUrlEncodedContent(ParseQueryString(real_send_msg)))
+							{
+								for (int attempts = 1; attempts <= MaxRetryAttempts && !success; attempts++)
+								{
+									try
+									{
+										ManagerLog.Instance.AddLog("System", "HTTP-Send", $"[{agvKey}] Gửi: {real_send_msg}");
+										var response = await _httpClient.PostAsync(endpoint, content).ConfigureAwait(false);
+
+										if (response.IsSuccessStatusCode)
+										{
+											string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+											ManagerLog.Instance.AddLog("System", "HTTP-Receive", $"[{agvKey}] {json}");
+											Parsing_Real_Message_2_AGV(json, agvData);
+											timeout_Init();
+											success = true;
+											IsServerConnected = true;
+										}
+										else
+										{
+											http_result = (int)response.StatusCode;
+											ManagerLog.Instance.AddLog("System", "HTTP-Result", $"[{agvKey}] Status: {http_result}");
+											if (attempts < MaxRetryAttempts)
+												await Task.Delay(RetryDelayMs).ConfigureAwait(false);
+										}
+									}
+									catch (Exception ex)
+									{
+										ManagerLog.Instance.AddLog("System", "HTTP", $"[{agvKey}] Error (Attempt {attempts}): {ex.Message}");
+										if (attempts < MaxRetryAttempts)
+											await Task.Delay(RetryDelayMs).ConfigureAwait(false);
+									}
+								}
+							}
+
+							if (!success)
+							{
+								IsServerConnected = false;
+								timeout_Check();
+							}
 						}
-					}
-					else
-					{
-						// Không thay đổi → vẫn reset timeout để server biết AGV còn sống
-						timeout_Init();
-						ManagerLog.Instance.AddLog("System", "HTTP", "Không thay đổi → không gửi API (vẫn giữ kết nối)");
+						// Không thay đổi và chưa đến heartbeat → bỏ qua
 					}
 
 					await Task.Delay(Sleep_Thread).ConfigureAwait(false);
@@ -173,7 +184,6 @@ namespace AGVNew.Services
 			sw_Receive.Restart();
 			Communication_OK_Check = true;
 			IsServerConnected = true;
-			ManagerLog.Instance.AddLog("System", "HTTP", "Timeout initialized, server connected");
 		}
 
 		public void timeout_Check()
@@ -201,62 +211,67 @@ namespace AGVNew.Services
 						.ToDictionary(k => k[0], v => v.Length > 1 ? v[1] : "");
 		}
 
-		private string Make_Send_2_ACS_Set()
+		private string Make_Send_2_ACS_Set(AGVData agvData)
 		{
-			AGVData.Instance.Real_Command_2_ACS.agv_id = AGVData.Instance.option.AGV_ID;
-			AGVData.Instance.Real_Command_2_ACS.action_0 = AGVData.Instance.state.action_0 ? "G" : "S";
+			agvData.Real_Command_2_ACS.agv_id = agvData.option.AGV_ID;
+			agvData.Real_Command_2_ACS.action_0 = agvData.state.action_0 ? "G" : "S";
 
-			switch (AGVData.Instance.state.action_1)
+			switch (agvData.state.action_1)
 			{
-				case 0: AGVData.Instance.Real_Command_2_ACS.action_1 = "S"; break;
-				case 1: AGVData.Instance.Real_Command_2_ACS.action_1 = "L"; break;
-				case 2: AGVData.Instance.Real_Command_2_ACS.action_1 = "R"; break;
-				default: AGVData.Instance.Real_Command_2_ACS.action_1 = "U"; break;
+				case 0: agvData.Real_Command_2_ACS.action_1 = "S"; break;
+				case 1: agvData.Real_Command_2_ACS.action_1 = "L"; break;
+				case 2: agvData.Real_Command_2_ACS.action_1 = "R"; break;
+				default: agvData.Real_Command_2_ACS.action_1 = "U"; break;
 			}
 
-			switch (AGVData.Instance.state.action_2)
+			switch (agvData.state.action_2)
 			{
-				case 0: AGVData.Instance.Real_Command_2_ACS.action_2 = "N"; break;
-				case 1: AGVData.Instance.Real_Command_2_ACS.action_2 = "U"; break;
-				case 2: AGVData.Instance.Real_Command_2_ACS.action_2 = "L"; break;
-				default: AGVData.Instance.Real_Command_2_ACS.action_2 = "N"; break;
+				case 0: agvData.Real_Command_2_ACS.action_2 = "N"; break;
+				case 1: agvData.Real_Command_2_ACS.action_2 = "U"; break;
+				case 2: agvData.Real_Command_2_ACS.action_2 = "L"; break;
+				default: agvData.Real_Command_2_ACS.action_2 = "N"; break;
 			}
 
-			AGVData.Instance.Real_Command_2_ACS.battery = Battery_Percent(AGVData.Instance.state.battery);
-			AGVData.Instance.Real_Command_2_ACS.tag_id = AGVData.Instance.state.tag_id;
+			agvData.Real_Command_2_ACS.battery = Battery_Percent(agvData.state.battery, agvData);
+			agvData.Real_Command_2_ACS.tag_id = agvData.state.tag_id;
 
-			switch (AGVData.Instance.state.speed)
+			switch (agvData.state.speed)
 			{
-				case 0: AGVData.Instance.Real_Command_2_ACS.speed = "S"; break;
-				case 1: AGVData.Instance.Real_Command_2_ACS.speed = "H"; break;
-				case 2: AGVData.Instance.Real_Command_2_ACS.speed = "M"; break;
-				case 3: AGVData.Instance.Real_Command_2_ACS.speed = "L"; break;
-				default: AGVData.Instance.Real_Command_2_ACS.speed = "S"; break;
+				case 0: agvData.Real_Command_2_ACS.speed = "S"; break;
+				case 1: agvData.Real_Command_2_ACS.speed = "H"; break;
+				case 2: agvData.Real_Command_2_ACS.speed = "M"; break;
+				case 3: agvData.Real_Command_2_ACS.speed = "L"; break;
+				default: agvData.Real_Command_2_ACS.speed = "S"; break;
 			}
 
-			AGVData.Instance.Real_Command_2_ACS.direction = AGVData.Instance.state.direction ? "B" : "F";
-			AGVData.Instance.Real_Command_2_ACS.state_0 = AGVData.Instance.state.state_0 ? 0 : 1;
-			AGVData.Instance.Real_Command_2_ACS.state_1 = AGVData.Instance.state.state_1 ? 1 : 0;
-			AGVData.Instance.Real_Command_2_ACS.error = AGVData.Instance.state.error;
+			agvData.Real_Command_2_ACS.direction = agvData.state.direction ? "B" : "F";
+			agvData.Real_Command_2_ACS.state_0 = agvData.state.state_0 ? 0 : 1;
+			agvData.Real_Command_2_ACS.state_1 = agvData.state.state_1 ? 1 : 0;
+			agvData.Real_Command_2_ACS.error = agvData.state.error;
 
-			if (AGVData.Instance.Line_Out >= AGVData.Instance.option.AGV_LineCount_MAX_Count)
+			if (agvData.Line_Out >= agvData.option.AGV_LineCount_MAX_Count)
 			{
-				AGVData.Instance.Real_Command_2_ACS.error = 8888;
+				agvData.Real_Command_2_ACS.error = 8888;
 			}
 
-			return $"agv_id={AGVData.Instance.Real_Command_2_ACS.agv_id}&action_0={AGVData.Instance.Real_Command_2_ACS.action_0}&action_1={AGVData.Instance.Real_Command_2_ACS.action_1}&action_2={AGVData.Instance.Real_Command_2_ACS.action_2}&battery={AGVData.Instance.Real_Command_2_ACS.battery}&tag_id={AGVData.Instance.Real_Command_2_ACS.tag_id}&speed={AGVData.Instance.Real_Command_2_ACS.speed}&direction={AGVData.Instance.Real_Command_2_ACS.direction}&state_0={AGVData.Instance.Real_Command_2_ACS.state_0}&state_1={AGVData.Instance.Real_Command_2_ACS.state_1}&error={AGVData.Instance.Real_Command_2_ACS.error}";
+			return $"agv_id={agvData.Real_Command_2_ACS.agv_id}&action_0={agvData.Real_Command_2_ACS.action_0}&action_1={agvData.Real_Command_2_ACS.action_1}&action_2={agvData.Real_Command_2_ACS.action_2}&battery={agvData.Real_Command_2_ACS.battery}&tag_id={agvData.Real_Command_2_ACS.tag_id}&speed={agvData.Real_Command_2_ACS.speed}&direction={agvData.Real_Command_2_ACS.direction}&state_0={agvData.Real_Command_2_ACS.state_0}&state_1={agvData.Real_Command_2_ACS.state_1}&error={agvData.Real_Command_2_ACS.error}";
+		}
+
+		public int Battery_Percent(double value, AGVData agvData)
+		{
+			if (agvData.option.AGV_Battery_MIN >= value)
+				return 0;
+			if (agvData.option.AGV_Battery_MAX <= value)
+				return 100;
+			return (int)((value - agvData.option.AGV_Battery_MIN) / Math.Abs(agvData.option.AGV_Battery_MAX - agvData.option.AGV_Battery_MIN) * 100.0);
 		}
 
 		public int Battery_Percent(double value)
 		{
-			if (AGVData.Instance.option.AGV_Battery_MIN >= value)
-				return 0;
-			if (AGVData.Instance.option.AGV_Battery_MAX <= value)
-				return 100;
-			return (int)((value - AGVData.Instance.option.AGV_Battery_MIN) / Math.Abs(AGVData.Instance.option.AGV_Battery_MAX - AGVData.Instance.option.AGV_Battery_MIN) * 100.0);
+			return Battery_Percent(value, AGVData.Instance);
 		}
 
-		private bool Parsing_Real_Message_2_AGV(string parsing_str)
+		private bool Parsing_Real_Message_2_AGV(string parsing_str, AGVData agvData)
 		{
 			try
 			{
@@ -265,33 +280,33 @@ namespace AGVNew.Services
 				{
 					if (ACS_Data.error != null)
 					{
-						ManagerLog.Instance.AddLog("System", "HTTP-Parsing", "Error: " + ACS_Data.error);
+						ManagerLog.Instance.AddLog("System", "HTTP-Parsing", $"[{agvData.option.AGV_Key}] Error: " + ACS_Data.error);
 					}
 					else
 					{
-						AGVData.Instance.Real_command_2_AGV.agv_id = ACS_Data.agv_id;
-						AGVData.Instance.Real_command_2_AGV.action_0 = ACS_Data.action_0;
-						AGVData.Instance.Real_command_2_AGV.action_1 = ACS_Data.action_1;
-						AGVData.Instance.Real_command_2_AGV.action_2 = ACS_Data.action_2;
-						AGVData.Instance.Real_command_2_AGV.tag_id = ACS_Data.tag_id;
-						AGVData.Instance.Real_command_2_AGV.speed = ACS_Data.speed;
-						AGVData.Instance.Real_command_2_AGV.front_sensor = ACS_Data.front_sensor;
-						AGVData.Instance.Real_command_2_AGV.agv_mode = ACS_Data.agv_mode;
-						AGVData.Instance.Real_command_2_AGV.acs_command = ACS_Data.acs_command;
+						agvData.Real_command_2_AGV.agv_id = ACS_Data.agv_id;
+						agvData.Real_command_2_AGV.action_0 = ACS_Data.action_0;
+						agvData.Real_command_2_AGV.action_1 = ACS_Data.action_1;
+						agvData.Real_command_2_AGV.action_2 = ACS_Data.action_2;
+						agvData.Real_command_2_AGV.tag_id = ACS_Data.tag_id;
+						agvData.Real_command_2_AGV.speed = ACS_Data.speed;
+						agvData.Real_command_2_AGV.front_sensor = ACS_Data.front_sensor;
+						agvData.Real_command_2_AGV.agv_mode = ACS_Data.agv_mode;
+						agvData.Real_command_2_AGV.acs_command = ACS_Data.acs_command;
 
 						string waitFor = ACS_Data.wait_for ?? "";
 						switch (waitFor.Length)
 						{
-							case 0: AGVData.Instance.Real_command_2_AGV.wait_for = "0000"; break;
-							case 1: AGVData.Instance.Real_command_2_AGV.wait_for = "000" + waitFor; break;
-							case 2: AGVData.Instance.Real_command_2_AGV.wait_for = "00" + waitFor; break;
-							case 3: AGVData.Instance.Real_command_2_AGV.wait_for = "0" + waitFor; break;
-							default: AGVData.Instance.Real_command_2_AGV.wait_for = waitFor; break;
+							case 0: agvData.Real_command_2_AGV.wait_for = "0000"; break;
+							case 1: agvData.Real_command_2_AGV.wait_for = "000" + waitFor; break;
+							case 2: agvData.Real_command_2_AGV.wait_for = "00" + waitFor; break;
+							case 3: agvData.Real_command_2_AGV.wait_for = "0" + waitFor; break;
+							default: agvData.Real_command_2_AGV.wait_for = waitFor; break;
 						}
 
-						AGVData.Instance.Real_command_2_AGV.alarm = ACS_Data.alarm;
-						AGVData.Instance.Real_command_2_AGV.depot = ACS_Data.depot;
-						AGVData.Instance.Real_command_2_AGV.location = ACS_Data.location ?? new List<string>();
+						agvData.Real_command_2_AGV.alarm = ACS_Data.alarm;
+						agvData.Real_command_2_AGV.depot = ACS_Data.depot;
+						agvData.Real_command_2_AGV.location = ACS_Data.location ?? new List<string>();
 					}
 					return true;
 				}
@@ -300,7 +315,7 @@ namespace AGVNew.Services
 			catch (Exception ex)
 			{
 				IsServerConnected = false;
-				ManagerLog.Instance.AddLog("System", "HTTP-Parsing", "Error: " + ex.Message);
+				ManagerLog.Instance.AddLog("System", "HTTP-Parsing", $"[{agvData.option.AGV_Key}] Error: " + ex.Message);
 				return false;
 			}
 		}

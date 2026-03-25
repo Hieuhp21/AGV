@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Threading;
 using AGVNew.Models;
@@ -113,170 +113,171 @@ namespace AGVNew.Services
             return sb.ToString().Trim();
         }
 
+        /// <summary>
+        /// Backward-compatible: đọc PLC cho AGV mặc định (AGV1)
+        /// </summary>
         public void UpdateStateFromPLC()
+        {
+            UpdateStateFromPLC(AGVData.Instance);
+        }
+
+        /// <summary>
+        /// Đọc PLC cho 1 AGV cụ thể, dùng address config từ AGVData.option
+        /// </summary>
+        public void UpdateStateFromPLC(AGVData targetAgv)
         {
             if (!IsConnected)
             {
-                ManagerLog.Instance.AddLog("System", "PLC", "Cannot update state: Not connected to PLC, attempting to reconnect...");
-                bool reconnected = Connect(AGVData.Instance.option.PLC_LogicalStationNumber);
+                ManagerLog.Instance.AddLog("System", "PLC", $"[{targetAgv.option.AGV_Key}] Cannot update state: Not connected to PLC, attempting to reconnect...");
+                bool reconnected = Connect(targetAgv.option.PLC_LogicalStationNumber);
                 if (!reconnected)
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", "Reconnection failed, skipping state update");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{targetAgv.option.AGV_Key}] Reconnection failed, skipping state update");
                     return;
                 }
             }
 
             try
             {
-                ManagerLog.Instance.AddLog("System", "PLC", "Starting PLC state update");
+                var opt = targetAgv.option;
+                string agvKey = opt.AGV_Key;
+                ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Starting PLC state update");
                 short result;
                 int code;
 
-                // Bỏ đọc agv_id từ PLC, lấy từ config AGVData.Instance.option.AGV_ID
-
-                // Đọc action_0 (M100, BIT)
-                code = _actUtlType.GetDevice2("M5000", out result);
+                // Đọc action_0 (M_Base + 0, BIT) - Go/Stop
+                code = _actUtlType.GetDevice2($"M{opt.PLC_M_Base}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.action_0 = result == 0;  // 0: Go (true), 1: Stop (false)
-                    //ManagerLog.Instance.AddLog("System", "PLC", $"Read M100 (action_0): {(AGVData.Instance.state.action_0 ? "Go" : "Stop")}");
+                    targetAgv.state.action_0 = result == 0;  // 0: Go (true), 1: Stop (false)
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M100 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base} (action_0) error, code: {code}");
                 }
 
-                // Đọc action_1 (D102, INT)
-                code = _actUtlType.GetDevice2("D5003", out result);
+                // Đọc action_1 (D_Action1, INT) - S/L/R
+                code = _actUtlType.GetDevice2($"D{opt.PLC_D_Action1}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.action_1 = result;
-                    //ManagerLog.Instance.AddLog("System", "PLC", $"Read  (action_1): {result} (0=S,1=L,2=R)");
+                    targetAgv.state.action_1 = result;
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read D102 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read D{opt.PLC_D_Action1} (action_1) error, code: {code}");
                 }
 
-                // Đọc action_2 (D103, INT)
-                code = _actUtlType.GetDevice2("D5004", out result);
+                // Đọc action_2 (D_Action2, INT) - N/U/L
+                code = _actUtlType.GetDevice2($"D{opt.PLC_D_Action2}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.action_2 = result;
-                   // ManagerLog.Instance.AddLog("System", "PLC", $"Read  (action_2): {result} (0=N,1=U,2=L)");
-                }
-                else
-                { 
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read D103 error, code: {code}");
-                }
-
-                // Đọc battery (D101, INT)
-                code = _actUtlType.GetDevice2("D5005", out result);
-                if (code == 0)
-                {
-                    AGVData.Instance.state.battery = result;
-                   // ManagerLog.Instance.AddLog("System", "PLC", $"Read D101 (battery): {result}%");
+                    targetAgv.state.action_2 = result;
                 }
                 else
                 {
-                    //ManagerLog.Instance.AddLog("System", "PLC", $"Read D101 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read D{opt.PLC_D_Action2} (action_2) error, code: {code}");
                 }
 
-                // Đọc tag_id (D200-D204, STRING)
+                // Đọc battery (D_Battery, INT)
+                code = _actUtlType.GetDevice2($"D{opt.PLC_D_Battery}", out result);
+                if (code == 0)
+                {
+                    targetAgv.state.battery = result;
+                }
+                else
+                {
+                    // silent - không log liên tục
+                }
+
+                // Đọc tag_id (D_TagId_Base ~ D_TagId_Base+4, STRING, 5 words)
                 short[] buffer = new short[5];
-                code = _actUtlType.ReadDeviceBlock2("D5010", 5, out buffer[0]);
+                code = _actUtlType.ReadDeviceBlock2($"D{opt.PLC_D_TagId_Base}", 5, out buffer[0]);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.tag_id = BufferToString(buffer);
-                   // ManagerLog.Instance.AddLog("System", "PLC", $"Read D200-D204 (tag_id): {AGVData.Instance.state.tag_id}");
+                    targetAgv.state.tag_id = BufferToString(buffer);
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read D5010-D5014 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read D{opt.PLC_D_TagId_Base}-D{opt.PLC_D_TagId_Base + 4} (tag_id) error, code: {code}");
                 }
 
-                // Đọc speed (D105, INT)
-                code = _actUtlType.GetDevice2("M5006", out result);
+                // Đọc speed (M_Base + 6, BIT)
+                code = _actUtlType.GetDevice2($"M{opt.PLC_M_Base + 6}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.speed = result;
-                   // ManagerLog.Instance.AddLog("System", "PLC", $"Read  (speed): {result} (0=S,1=H,2=M,3=L)");
+                    targetAgv.state.speed = result;
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base + 6} (speed): {result} (0=S,1=H,2=M,3=L)");
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M5000 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base + 6} (speed) error, code: {code}");
                 }
 
-                // Đọc direction (M107, BIT)
-                code = _actUtlType.GetDevice2("M5001", out result);
+                // Đọc direction (M_Base + 1, BIT) - F/B
+                code = _actUtlType.GetDevice2($"M{opt.PLC_M_Base + 1}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.direction = result != 0;  // 0:F, 1:B
-                    //ManagerLog.Instance.AddLog("System", "PLC", $"Read  (direction): {(AGVData.Instance.state.direction ? "Backward" : "Forward")}");
+                    targetAgv.state.direction = result != 0;  // 0:F, 1:B
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M5001 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base + 1} (direction) error, code: {code}");
                 }
 
-                // Đọc state_0 (M108, BIT)
-                code = _actUtlType.GetDevice2("M5002", out result);
+                // Đọc state_0 (M_Base + 2, BIT)
+                code = _actUtlType.GetDevice2($"M{opt.PLC_M_Base + 2}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.state_0 = result == 0;  // 0: working (true?), 1: ? (false)
-                    //ManagerLog.Instance.AddLog("System", "PLC", $"Read M108 (state_0): {(AGVData.Instance.state.state_0 ? "Working" : "Unknown")}");
+                    targetAgv.state.state_0 = result == 0;
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M108 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base + 2} (state_0) error, code: {code}");
                 }
 
-                // Đọc state_1 (M109, BIT)
-                code = _actUtlType.GetDevice2("M5003", out result);
+                // Đọc state_1 (M_Base + 3, BIT)
+                code = _actUtlType.GetDevice2($"M{opt.PLC_M_Base + 3}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.state_1 = result != 0;
-                  //  ManagerLog.Instance.AddLog("System", "PLC", $"Read M5350 (state_1): {result != 0}");
+                    targetAgv.state.state_1 = result != 0;
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M109 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base + 3} (state_1) error, code: {code}");
                 }
 
-                // Đọc error (D110, INT) - 0: no error; 1: Low Battery; 2: Motor Failure; 3: Sensor Error; other: Unknown Error
-                code = _actUtlType.GetDevice2("M5350", out result);
+                // Đọc error (D_Error, INT)
+                code = _actUtlType.GetDevice2($"D{opt.PLC_D_Error}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.error = result;
-                  //  ManagerLog.Instance.AddLog("System", "PLC", $"Read M5350 (error): {result} (0=no error)");
+                    targetAgv.state.error = result;
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M5350 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read D{opt.PLC_D_Error} (error) error, code: {code}");
                 }
 
-                // Đọc mode (M110, BIT)
-                code = _actUtlType.GetDevice2("M5004", out result);
+                // Đọc mode (M_Base + 4, BIT) - auto/manual
+                code = _actUtlType.GetDevice2($"M{opt.PLC_M_Base + 4}", out result);
                 if (code == 0)
                 {
-                    AGVData.Instance.state.mode = result != 0;  // 0: auto (false), 1: manual (true)
-                    //ManagerLog.Instance.AddLog("System", "PLC", $"Read M5004 (mode): {(AGVData.Instance.state.mode ? "Manual" : "Auto")}");
+                    targetAgv.state.mode = result != 0;  // 0: auto (false), 1: manual (true)
                 }
                 else
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", $"Read M5004 error, code: {code}");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Read M{opt.PLC_M_Base + 4} (mode) error, code: {code}");
                 }
 
-                ManagerLog.Instance.AddLog("System", "PLC", "Completed PLC state update");
+                ManagerLog.Instance.AddLog("System", "PLC", $"[{agvKey}] Completed PLC state update");
             }
             catch (Exception ex)
             {
                 IsConnected = false;
-                ManagerLog.Instance.AddLog("System", "PLC", $"Read error: {ex.Message}, StackTrace: {ex.StackTrace}. Attempting to reconnect...");
-                bool reconnected = Connect(AGVData.Instance.option.PLC_LogicalStationNumber);
+                ManagerLog.Instance.AddLog("System", "PLC", $"[{targetAgv.option.AGV_Key}] Read error: {ex.Message}, StackTrace: {ex.StackTrace}. Attempting to reconnect...");
+                bool reconnected = Connect(targetAgv.option.PLC_LogicalStationNumber);
                 if (!reconnected)
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", "Reconnection failed after read error");
+                    ManagerLog.Instance.AddLog("System", "PLC", $"[{targetAgv.option.AGV_Key}] Reconnection failed after read error");
                 }
             }
         }

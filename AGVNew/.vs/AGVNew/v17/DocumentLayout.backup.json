@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|d:\\a_project\\agv_baa_lge\\agvnew\\presenters\\mainpresenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:presenters\\mainpresenter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\mitsubishiplc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\mitsubishiplc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\agvdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\agvdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\managerhttp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,22 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\mockplcservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\mockplcservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\agvdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:models\\agvdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\services\\mitsubishiplc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:services\\mitsubishiplc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\realcommand2acs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -53,10 +57,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\views\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:views\\mainform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{475D55BD-C5C8-407A-8C51-065CED355B04}|AGVNew.csproj|D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\models\\acsactioncommandack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 17,
           "Children": [
             {
               "$type": "Bookmark",
@@ -118,32 +118,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "ACS2AGVResult.cs",
-              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACS2AGVResult.cs",
-              "RelativeDocumentMoniker": "Models\\ACS2AGVResult.cs",
-              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACS2AGVResult.cs",
-              "RelativeToolTip": "Models\\ACS2AGVResult.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
+              "RelativeDocumentMoniker": "Views\\MainForm.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
+              "RelativeToolTip": "Views\\MainForm.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAUwCEAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T06:34:39.213Z"
+              "WhenOpened": "2025-09-11T06:55:12.893Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ManagerHTTP.cs",
-              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerHTTP.cs",
-              "RelativeDocumentMoniker": "Services\\ManagerHTTP.cs",
-              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerHTTP.cs*",
-              "RelativeToolTip": "Services\\ManagerHTTP.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMBAAABAAAAAAAAAA==",
+              "Title": "MainPresenter.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Presenters\\MainPresenter.cs",
+              "RelativeDocumentMoniker": "Presenters\\MainPresenter.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Presenters\\MainPresenter.cs",
+              "RelativeToolTip": "Presenters\\MainPresenter.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAWwFcAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T06:37:27.918Z",
+              "WhenOpened": "2025-09-11T06:36:57.938Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "ManagerLog.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerLog.cs",
               "RelativeDocumentMoniker": "Services\\ManagerLog.cs",
@@ -151,24 +151,11 @@
               "RelativeToolTip": "Services\\ManagerLog.cs",
               "ViewState": "AgIAAB4AAAAAAAAAAAAowA4AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T06:37:56.876Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-11T06:37:56.876Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MainForm.cs",
-              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
-              "RelativeDocumentMoniker": "Views\\MainForm.cs",
-              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
-              "RelativeToolTip": "Views\\MainForm.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T06:55:12.893Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "MainForm.cs [Design]",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.cs",
               "RelativeDocumentMoniker": "Views\\MainForm.cs",
@@ -179,20 +166,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MainPresenter.cs",
-              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Presenters\\MainPresenter.cs",
-              "RelativeDocumentMoniker": "Presenters\\MainPresenter.cs",
-              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Presenters\\MainPresenter.cs*",
-              "RelativeToolTip": "Presenters\\MainPresenter.cs*",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAAwOwAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "ManagerHTTP.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerHTTP.cs",
+              "RelativeDocumentMoniker": "Services\\ManagerHTTP.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\ManagerHTTP.cs",
+              "RelativeToolTip": "Services\\ManagerHTTP.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T06:36:57.938Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-11T06:37:27.918Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "MockPLCService.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MockPLCService.cs",
               "RelativeDocumentMoniker": "Services\\MockPLCService.cs",
@@ -200,24 +186,23 @@
               "RelativeToolTip": "Services\\MockPLCService.cs",
               "ViewState": "AgIAAC0AAAAAAAAAAAAIwFYAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-12T06:10:47.495Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-12T06:10:47.495Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "AGVData.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\AGVData.cs",
               "RelativeDocumentMoniker": "Models\\AGVData.cs",
               "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\AGVData.cs",
               "RelativeToolTip": "Models\\AGVData.cs",
-              "ViewState": "AgIAAEQAAAAAAAAAAAAowEsAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAowFMAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T06:31:53.263Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "FullPathACS2AGV.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\FullPathACS2AGV.cs",
               "RelativeDocumentMoniker": "Models\\FullPathACS2AGV.cs",
@@ -229,19 +214,44 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "MitsubishiPLC.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MitsubishiPLC.cs",
               "RelativeDocumentMoniker": "Services\\MitsubishiPLC.cs",
               "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Services\\MitsubishiPLC.cs",
               "RelativeToolTip": "Services\\MitsubishiPLC.cs",
-              "ViewState": "AgIAAPQAAAAAAAAAAAAYwBsBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAjwMoAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T06:37:44.399Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
+              "Title": "ACS2AGVResult.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACS2AGVResult.cs",
+              "RelativeDocumentMoniker": "Models\\ACS2AGVResult.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\ACS2AGVResult.cs",
+              "RelativeToolTip": "Models\\ACS2AGVResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T06:34:39.213Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T07:22:49.714Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "RealCommand2ACS.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\RealCommand2ACS.cs",
               "RelativeDocumentMoniker": "Models\\RealCommand2ACS.cs",
@@ -253,7 +263,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "RealACS2AGV.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Models\\RealACS2AGV.cs",
               "RelativeDocumentMoniker": "Models\\RealACS2AGV.cs",
@@ -265,7 +275,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "MainForm.Designer.cs",
               "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Views\\MainForm.Designer.cs",
               "RelativeDocumentMoniker": "Views\\MainForm.Designer.cs",
@@ -274,18 +284,6 @@
               "ViewState": "AgIAAKoCAAAAAAAAAAAswCYCAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T06:55:03.073Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\A_Project\\AGV_BAA_LGE\\AGVNew\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-11T07:22:49.714Z"
             },
             {
               "$type": "Document",
@@ -354,10 +352,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
             }
           ]
         }

@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using AGVNew.Models;
 using AGVNew.Services;
 using AGVNew.Views;
-using System.Windows.Forms; // THÊM DÒNG NÀY ĐỂ DÙNG Control
+using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace AGVNew.Presenters
 {
     public class MainPresenter : IDisposable
     {
-        private readonly AGVData _model;
         private readonly MainForm _view;
         private readonly ManagerHTTP _httpService;
         private readonly MitsubishiPLC _plcService;
@@ -21,205 +21,281 @@ namespace AGVNew.Presenters
         private Task _uiUpdateTask;
         private Task _plcMonitorTask;
 
-        public MainPresenter(AGVData model, MainForm view)
+        public MainPresenter(MainForm view)
         {
-            _model = model ?? throw new ArgumentNullException(nameof(model));
             _view = view ?? throw new ArgumentNullException(nameof(view));
             _httpService = ManagerHTTP.Instance;
             _plcService = MitsubishiPLC.Instance;
             _mockService = MockPLCService.Instance;
 
             ManagerLog.Instance.View = _view;
-            ManagerLog.Instance.AddLog("System", "Presenter", "MainPresenter initialized");
+            ManagerLog.Instance.AddLog("System", "Presenter", "MainPresenter initialized (Multi-AGV mode)");
 
-            _view.UpdateAgvInfo(_model);
+            // Cập nhật AGV Info cho tất cả tabs
+            foreach (var kvp in _view.AgvControlSets)
+            {
+                string agvKey = kvp.Key;
+                AGVControlSet controls = kvp.Value;
+                if (AGVData.All.ContainsKey(agvKey))
+                {
+                    _view.UpdateAgvInfo(AGVData.All[agvKey], controls);
+                }
+            }
 
             _cts = new CancellationTokenSource();
             _uiUpdateTask = Task.Run(() => UiUpdateLoop(_cts.Token));
-            _plcMonitorTask = Task.Run(() => PlcMonitorLoop(_cts.Token));
+
+            // Nếu USE_MOCK = true: chạy mock ngay, không cần PLC
+            if (Program.USE_MOCK)
+            {
+                ManagerLog.Instance.AddLog("System", "Presenter", "USE_MOCK=true → Starting Mock mode");
+                _mockService.StartMock();
+            }
+            else
+            {
+                // Chạy thật: monitor PLC connection
+                _plcMonitorTask = Task.Run(() => PlcMonitorLoop(_cts.Token));
+            }
         }
 
         private async void UiUpdateLoop(CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
+            try
             {
-                try
+                while (!token.IsCancellationRequested)
                 {
-                    if (_view.IsDisposed || _view.Disposing) break;
+                    try
+                    {
+                        if (_view.IsDisposed || _view.Disposing) break;
 
-                    // CHỈ ĐỌC PLC KHI KHÔNG MOCK
-                    if (!_mockService.IsRunning && _plcService.IsConnected)
+                        // CHỈ cập nhật UI — PLC đọc ở HTTP thread hoặc Mock thread
+                        // Không đọc PLC ở đây để tránh double-read
+
+                        if (_view.InvokeRequired)
+                        {
+                            _view.BeginInvoke(new Action(UpdateAllLabels));
+                        }
+                        else
+                        {
+                            UpdateAllLabels();
+                        }
+                    }
+                    catch (Exception ex) when (!(ex is OperationCanceledException))
                     {
-                        MitsubishiPLC.Instance.UpdateStateFromPLC();
+                        ManagerLog.Instance.AddLog("System", "UI", "Update error: " + ex.Message);
                     }
 
-                    if (_view.InvokeRequired)
-                    {
-                        _view.BeginInvoke(new Action(UpdateLabels));
-                    }
-                    else
-                    {
-                        UpdateLabels();
-                    }
+                    await Task.Delay(500, token).ConfigureAwait(false);
                 }
-                catch (Exception ex)
-                {
-                    ManagerLog.Instance.AddLog("System", "UI", "Update error: " + ex.Message);
-                }
-
-                await Task.Delay(500, token).ConfigureAwait(false);
             }
+            catch (OperationCanceledException) { /* Graceful exit */ }
         }
 
         private async void PlcMonitorLoop(CancellationToken token)
         {
-            bool wasConnected = false;
-			bool hasStartedHttp = false;
-			while (!token.IsCancellationRequested)
+            try
             {
-                 bool isConnected = _plcService.IsConnected;
-               // bool isConnected = true;
-                if (!isConnected && wasConnected)
+                bool wasConnected = false;
+                bool hasStartedHttp = false;
+                string plcIp = AGVData.Instance.option.PLC_IP ?? "192.168.3.39";
+                int pingTimeoutMs = 1000;
+                int reconnectDelayMs = 2000;
+                const int maxDelayMs = 30000;
+
+                DateTime lastSuccessfulPing = DateTime.Now;
+
+                while (!token.IsCancellationRequested)
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", "Connection lost. Reconnecting...");
-					_httpService.StopThread();
-					// _mockService.StartMock();
-				}
-                else if (isConnected && !wasConnected)
+                    bool isConnected = _plcService.IsConnected;
+
+                    if (!isConnected && wasConnected)
+                    {
+                        ManagerLog.Instance.AddLog("System", "PLC", "Connection lost");
+                        _httpService.StopThread();
+                        hasStartedHttp = false;
+                        // Không tự bật mock → chỉ hiển Disconnected
+                    }
+
+                    if (isConnected && !wasConnected && !hasStartedHttp)
+                    {
+                        ManagerLog.Instance.AddLog("System", "PLC", "PLC reconnected → Starting HTTP server");
+                        _httpService.Http_Thread_Start();
+                        hasStartedHttp = true;
+                    }
+
+                    if (isConnected)
+                    {
+                        if (DateTime.Now - lastSuccessfulPing > TimeSpan.FromSeconds(15))
+                        {
+                            bool pingOk = await PingHostAsync(plcIp, pingTimeoutMs);
+                            if (pingOk)
+                            {
+                                lastSuccessfulPing = DateTime.Now;
+                            }
+                            else
+                            {
+                                ManagerLog.Instance.AddLog("System", "PLC", "Ping failed while IsConnected=true → Force disconnect check");
+                                _ = Task.Run(() =>
+                                {
+                                    foreach (var kvp in AGVData.All)
+                                    {
+                                        MitsubishiPLC.Instance.UpdateStateFromPLC(kvp.Value);
+                                    }
+                                });
+                            }
+                        }
+
+                        await Task.Delay(10000, token).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        bool pingSuccess = await PingHostAsync(plcIp, pingTimeoutMs);
+
+                        if (pingSuccess)
+                        {
+                            ManagerLog.Instance.AddLog("System", "PLC", $"Ping {plcIp} OK → Reconnecting...");
+                            _plcService.Connect(AGVData.Instance.option.PLC_LogicalStationNumber);
+                            reconnectDelayMs = 2000;
+                        }
+                        else
+                        {
+                            reconnectDelayMs = Math.Min(reconnectDelayMs * 2, maxDelayMs);
+                            ManagerLog.Instance.AddLog("System", "PLC", $"Ping failed. Next try in {reconnectDelayMs / 1000}s");
+                        }
+
+                        await Task.Delay(reconnectDelayMs, token).ConfigureAwait(false);
+                    }
+
+                    wasConnected = isConnected;
+                }
+            }
+            catch (OperationCanceledException) { /* Graceful exit */ }
+        }
+
+        private static Task<bool> PingHostAsync(string host, int timeoutMs)
+        {
+            return Task.Run(() =>
+            {
+                try
                 {
-                    ManagerLog.Instance.AddLog("System", "PLC", "Reconnected. Starting HTTP...");
-                    _httpService.Http_Thread_Start();
+                    using (var ping = new System.Net.NetworkInformation.Ping())
+                    {
+                        var reply = ping.Send(host, timeoutMs);
+                        return reply?.Status == System.Net.NetworkInformation.IPStatus.Success;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+        }
+
+        /// <summary>
+        /// Cập nhật labels cho TẤT CẢ AGV tabs
+        /// </summary>
+        private void UpdateAllLabels()
+        {
+            foreach (var kvp in _view.AgvControlSets)
+            {
+                string agvKey = kvp.Key;
+                AGVControlSet controls = kvp.Value;
+
+                AGVData agvData;
+                if (AGVData.All.ContainsKey(agvKey))
+                {
+                    agvData = AGVData.All[agvKey];
+                }
+                else
+                {
+                    continue;
                 }
 
-                if (!isConnected)
-                {
-                    // await Task.Run(() => _plcService.Connect(_model.option.PLC_LogicalStationNumber));
-                }
-
-                wasConnected = isConnected;
-                await Task.Delay(2000, token).ConfigureAwait(false);
+                UpdateLabelsForAgv(agvData, controls);
             }
         }
 
-        private void UpdateLabels()
+        /// <summary>
+        /// Cập nhật labels cho 1 AGV cụ thể
+        /// </summary>
+        private void UpdateLabelsForAgv(AGVData model, AGVControlSet controls)
         {
-            var plcState = _model.state;
+            var plcState = model.state;
             if (plcState == null) return;
 
             try
             {
-                _view.LblAgvIdValue.Text = _model.option.AGV_ID;
-                _view.LblOpStatusValue.Text = plcState.action_0 ? "Working" : "None";
-                _view.LblRfidValue.Text = string.IsNullOrEmpty(plcState.tag_id) ? "N/A" : plcState.tag_id;
-                _view.LblSpeedValue.Text = _model.GetSpeed();
-                _view.LblMovementValue.Text = _model.GetMovement();
-                _view.LblLoadStatusValue.Text = _model.GetLoadStatus();
-                _view.LblDirectionValue.Text = plcState.direction ? "Backward" : "Forward";
+                controls.LblAgvIdValue.Text = model.option.AGV_ID;
+                controls.LblOpStatusValue.Text = plcState.action_0 ? "Working" : "None";
+                controls.LblRfidValue.Text = string.IsNullOrEmpty(plcState.tag_id) ? "N/A" : plcState.tag_id;
+                controls.LblSpeedValue.Text = model.GetSpeed();
+                controls.LblMovementValue.Text = model.GetMovement();
+                controls.LblLoadStatusValue.Text = model.GetLoadStatus();
+                controls.LblDirectionValue.Text = plcState.direction ? "Backward" : "Forward";
 
                 int battery = Math.Max(0, Math.Min(100, plcState.battery));
-                _view.PbBattery.Value = battery;
-                _view.LblBatteryValue.Text = $"{battery}%";
-                _view.PbBattery.ForeColor = battery > 50 ? Color.Green : battery > 20 ? Color.Yellow : Color.Red;
+                controls.PbBattery.Value = battery;
+                controls.LblBatteryValue.Text = $"{battery}%";
+                controls.PbBattery.ForeColor = battery > 50 ? Color.Green : battery > 20 ? Color.Yellow : Color.Red;
 
-                // Cập nhật AGV Status (error)
+                // AGV Status (error)
                 if (plcState.error == 0)
                 {
-                    _view.LblSystemStatus.Text = "OK";
-                    _view.PnlSystemStatus.BackColor = Color.LimeGreen;
-                    _view.LblSystemStatusIcon.Text = "✓";
-                    _view.LblErrorDetail.Visible = false;
+                    controls.LblSystemStatus.Text = "OK";
+                    controls.PnlSystemStatus.BackColor = Color.LimeGreen;
+                    controls.LblSystemStatusIcon.Text = "✓";
+                    controls.LblErrorDetail.Visible = false;
                 }
                 else
                 {
-                    _view.LblSystemStatus.Text = "Error";
-                    _view.PnlSystemStatus.BackColor = Color.Red;
-                    _view.LblSystemStatusIcon.Text = "✗";
-                    _view.LblErrorDetail.Visible = true;
+                    controls.LblSystemStatus.Text = "Error";
+                    controls.PnlSystemStatus.BackColor = Color.Red;
+                    controls.LblSystemStatusIcon.Text = "✗";
+                    controls.LblErrorDetail.Visible = true;
                     string errorMessage;
                     switch (plcState.error)
                     {
-                        case 1:
-                            errorMessage = "Low Battery";
-                            break;
-                        case 2:
-                            errorMessage = "Motor Failure";
-                            break;
-                        case 3:
-                            errorMessage = "Sensor Error";
-                            break;
-                        default:
-                            errorMessage = $"Unknown Error ({plcState.error})";
-                            break;
+                        case 1: errorMessage = "Low Battery"; break;
+                        case 2: errorMessage = "Motor Failure"; break;
+                        case 3: errorMessage = "Sensor Error"; break;
+                        default: errorMessage = $"Unknown Error ({plcState.error})"; break;
                     }
-                    _view.LblErrorDetail.Text = errorMessage;
-
-                    // Ghi lỗi vào textBoxalarm
-                    _view.AppendErrorLog(errorMessage);
+                    controls.LblErrorDetail.Text = errorMessage;
+                    _view.AppendErrorLog(errorMessage, controls);
                 }
 
-                // Cập nhật PLC Status
-                _view.PnlPlcStatus.BackColor = _mockService.IsRunning ? Color.Yellow : (_plcService.IsConnected ? Color.LimeGreen : Color.Red);
-                _view.LblPlcStatus.Text = _mockService.IsRunning ? "Mock Mode" : (_plcService.IsConnected ? "Connected" : "Disconnected");
-                _view.LblPlcIcon.Text = _mockService.IsRunning ? "⚙" : (_plcService.IsConnected ? "✓" : "✗");
-                _view.PnlPlcStatus.Invalidate();
-                _view.LblPlcStatus.Invalidate();
-                _view.LblPlcIcon.Invalidate();
+                // PLC Status (chung cho tất cả AGV vì chung 1 PLC)
+                controls.PnlPlcStatus.BackColor = _mockService.IsRunning ? Color.Yellow : (_plcService.IsConnected ? Color.LimeGreen : Color.Red);
+                controls.LblPlcStatus.Text = _mockService.IsRunning ? "Mock Mode" : (_plcService.IsConnected ? "Connected" : "Disconnected");
+                controls.LblPlcIcon.Text = _mockService.IsRunning ? "⚙" : (_plcService.IsConnected ? "✓" : "✗");
 
-                // Cập nhật Server Status
-                _view.PnlServerStatus.BackColor = _httpService.IsServerConnected ? Color.LimeGreen : Color.Red;
-                _view.LblServerStatus.Text = _httpService.IsServerConnected ? "Connected" : "Disconnected";
-                _view.LblServerIcon.Text = _httpService.IsServerConnected ? "✓" : "✗";
-                _view.PnlServerStatus.Invalidate();
-                _view.LblServerStatus.Invalidate();
-                _view.LblServerIcon.Invalidate();
+                // Server Status
+                controls.PnlServerStatus.BackColor = _httpService.IsServerConnected ? Color.LimeGreen : Color.Red;
+                controls.LblServerStatus.Text = _httpService.IsServerConnected ? "Connected" : "Disconnected";
+                controls.LblServerIcon.Text = _httpService.IsServerConnected ? "✓" : "✗";
 
-                // Cập nhật Mode (gộp auto/manual)
-                _view.PnlAuto.BackColor = !plcState.mode ? Color.LimeGreen : Color.Gray;
-                _view.LblAutoIcon.Text = !plcState.mode ? "↻" : "○";
-                _view.PnlManual.BackColor = plcState.mode ? Color.LimeGreen : Color.Gray;
-                _view.LblManualIcon.Text = plcState.mode ? "👤" : "○";
-
-                InvalidateControls();
+                // Mode (auto/manual)
+                controls.PnlAuto.BackColor = !plcState.mode ? Color.LimeGreen : Color.Gray;
+                controls.LblAutoIcon.Text = !plcState.mode ? "↻" : "○";
+                controls.PnlManual.BackColor = plcState.mode ? Color.LimeGreen : Color.Gray;
+                controls.LblManualIcon.Text = plcState.mode ? "👤" : "○";
             }
+            catch (ObjectDisposedException) { /* Form closing */ }
             catch (Exception ex)
             {
-                ManagerLog.Instance.AddLog("System", "UI", "UpdateLabels error: " + ex.Message);
+                ManagerLog.Instance.AddLog("System", "UI", $"[{controls.AgvKey}] UpdateLabels error: " + ex.Message);
             }
         }
 
-        // SỬA: DÙNG Control[] RÕ RÀNG
-        private void InvalidateControls()
-        {
-            Control[] controls = new Control[]
-            {
-                _view.LblOpStatusValue, _view.LblRfidValue, _view.LblSpeedValue,
-                _view.LblMovementValue, _view.LblDirectionValue, _view.LblLoadStatusValue,
-                _view.PbBattery, _view.LblBatteryValue,
-                _view.PnlSystemStatus, _view.LblSystemStatus, _view.LblSystemStatusIcon, _view.LblErrorDetail,
-                _view.PnlPlcStatus, _view.LblPlcStatus, _view.LblPlcIcon,
-                _view.PnlServerStatus, _view.LblServerStatus, _view.LblServerIcon,
-                _view.PnlAuto, _view.LblAutoIcon, _view.PnlManual, _view.LblManualIcon
-            };
-
-            foreach (Control ctrl in controls)
-            {
-                try { ctrl?.Invalidate(); } catch { }
-            }
-
-            try
-            {
-                _view.Invalidate(true);
-                _view.Refresh();
-            }
-            catch { }
-        }
+        // InvalidateControls removed — WinForms tự repaint khi Text/BackColor thay đổi
+        // Gọi Invalidate(true) + Refresh() mỗi 500ms gây lag nặng khi chạy 24/7
 
         public void ConnectPLC()
         {
             ManagerLog.Instance.AddLog("System", "Presenter", "Manual PLC reconnect");
             Task.Run(() =>
             {
-                bool success = _plcService.Connect(_model.option.PLC_LogicalStationNumber);
+                bool success = _plcService.Connect(AGVData.Instance.option.PLC_LogicalStationNumber);
                 ManagerLog.Instance.AddLog("System", "Presenter", success ? "PLC reconnected" : "Reconnect failed");
             });
         }
@@ -229,7 +305,7 @@ namespace AGVNew.Presenters
             _cts?.Cancel();
             _cts?.Dispose();
             _httpService.StopThread();
-			try { _uiUpdateTask?.Wait(1000); } catch { }
+            try { _uiUpdateTask?.Wait(1000); } catch { }
             try { _plcMonitorTask?.Wait(1000); } catch { }
 
             ManagerLog.Instance.AddLog("System", "Presenter", "Disposed");
